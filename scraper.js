@@ -125,7 +125,7 @@ app.listen(5051, async () => {
 
   log(chalk.bold.magenta('Magic start!'));  
   while (currentListingCount <= totalListings) {
-    if (currentListingCount === 3) break;
+    if (currentListingCount === 5) break;
     log(chalk.bold.bgGreen.white(`Processing listing ${currentListingCount} out of ${totalListings}`));
     let agentDetails = {
       Name: '',
@@ -245,11 +245,15 @@ app.listen(5051, async () => {
     fsPath.writeFileSync(checkpointsPath(`agents-${dateNow}.csv`), csv, 'utf8'); 
     fsPath.writeFileSync(outputPath(`agents.csv`), csv, 'utf8'); 
 
-    log(chalk.bold.magenta('Done!'));    
+    log(chalk.bold.magenta('Done!'));
+    log('');
+
+    log(chalk.bold.magenta('---------------------- SUMMARY ----------------------'));
+    log(chalk.bold.magenta(`-> Number of NEW agents FOUND for this scrape instance: ${allAgentDetails.length}`));
   } else {
     log(chalk.bold.magenta('agents.csv FOUND! Preparing...'));      
 
-    let data = fsPath.readFileSync(outputPath('agents.csv'), { encoding: 'utf8' });
+    let data = fs.readFileSync(outputPath('agents.csv'), { encoding: 'utf8' });
     data = csvjson.toSchemaObject(data, { quote: true });
 
     let dataCountBefore = data.length;
