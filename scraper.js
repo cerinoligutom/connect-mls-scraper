@@ -38,9 +38,33 @@ const PARAMS = {
 };
 
 app.listen(5051, async () => {
+  log(chalk.bold.magenta('Checking .env parameters...'));
+
+  log(chalk.bold.magenta('Checking Credentials parameters...'));  
+  if (!CREDENTIALS.username || !CREDENTIALS.password) {
+    log(chalk.bold.red('USERID or PASSWORD is not set! Terminating...'));
+    process.exit(0);
+  }
+  log(chalk.bold.magenta('Credentials parameters OK!'));    
+
+  log(chalk.bold.magenta('Checking ConnectMLS Search Form parameters...'));    
+  if (!PARAMS.status) {
+    log(chalk.bold.red('Status missing! Using Connect MLS default values.'));    
+  } else if (!PARAMS.searchPriceMin) {
+    log(chalk.bold.red('SEARCH_PRICE_MIN is not set! Terminating...'));
+    process.exit(0);
+  } else if (!PARAMS.searchPriceMax) {
+    log(chalk.bold.red('SEARCH_PRICE_MAX is not set! Terminating...'));
+    process.exit(0);
+  } else if (!PARAMS.monthsBack) {
+    log(chalk.bold.red('MONTHS_BACK is not set! Terminating...'));    
+    process.exit(0);
+  }
+  log(chalk.bold.magenta('ConnectMLS Search Form parameters OK!'));
+
   log(chalk.bold.magenta('Opening browser...'));
 
-  let headless = process.env.SILENT;
+  let headless = process.env.SILENT || 'true';
   headless = headless.trim().toLowerCase();
   if (headless === 'false') {
     headless = false;
@@ -82,7 +106,7 @@ app.listen(5051, async () => {
   const SEARCH_SELECTOR = '#search > div';
 
   await page.click(SEARCH_SELECTOR);
-  await page.waitFor(+process.env.NAVIGATE_TO_SEARCH_FORM_DELAY);
+  await page.waitFor(+process.env.NAVIGATE_TO_SEARCH_FORM_DELAY || 5000);
 
   // Manipulate search form
   log(chalk.bold.magenta('Automagically filling up details...'));
@@ -162,11 +186,11 @@ app.listen(5051, async () => {
     value = value.split(`'`)[1];
 
     await nextButton.click();
-    await navpanelFrame.waitFor(+process.env.LISTING_PAGE_DELAY);
+    await navpanelFrame.waitFor(+process.env.LISTING_PAGE_DELAY || 1000);
 
     let currentAgentPage = await browser.newPage();
     await currentAgentPage.goto(`${domain}${value}`, { waitUntil: 'load' });
-    await currentAgentPage.waitFor(+process.env.AGENT_PAGE_DELAY);
+    await currentAgentPage.waitFor(+process.env.AGENT_PAGE_DELAY || 2000);
 
     let agent = await currentAgentPage.$eval(
       'table table table table tr strong',
