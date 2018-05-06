@@ -39,8 +39,19 @@ const PARAMS = {
 
 app.listen(5051, async () => {
   log(chalk.bold.magenta('Opening browser...'));
+
+  let headless = process.env.SILENT;
+  headless = headless.trim().toLowerCase();
+  if (headless === 'false') {
+    headless = false;
+  } else if (headless === 'true') {
+    headless = true;
+  } else {
+    headless = true;
+  }
+
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: headless,
     slowMo: 10
   });
   const page = await browser.newPage();
