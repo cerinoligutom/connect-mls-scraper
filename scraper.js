@@ -3,6 +3,7 @@ const puppeteer = require('puppeteer');
 const _ = require('lodash');
 const csvjson = require('csvjson');
 const fs = require('fs');
+const fsPath = require('fs-path');
 const path = require('path');
 const chalk = require('chalk');
 const log = console.log;
@@ -124,6 +125,7 @@ app.listen(5051, async () => {
 
   log(chalk.bold.magenta('Magic start!'));  
   while (currentListingCount <= totalListings) {
+    if (currentListingCount === 3) break;
     log(chalk.bold.bgGreen.white(`Processing listing ${currentListingCount} out of ${totalListings}`));
     let agentDetails = {
       Name: '',
@@ -233,21 +235,21 @@ app.listen(5051, async () => {
   }
 
   log(chalk.bold.magenta(`Writing instance data to file @ ${instancePath(`${dateNow}.csv`)}...`));
-  fs.writeFileSync(instancePath(`${dateNow}.csv`), csv, 'utf8');
+  fsPath.writeFileSync(instancePath(`${dateNow}.csv`), csv, 'utf8');
   log(chalk.bold.magenta('Successfully written to instances!'));
 
   log(chalk.bold.magenta('Checking if agents.csv exists...'));
   if (!fs.existsSync(outputPath('agents.csv'))) {
     log(chalk.bold.red('agents.csv NOT FOUND! Initializing...'));
 
-    fs.writeFileSync(checkpointsPath(`agents-${dateNow}.csv`), csv, 'utf8'); 
-    fs.writeFileSync(outputPath(`agents.csv`), csv, 'utf8'); 
+    fsPath.writeFileSync(checkpointsPath(`agents-${dateNow}.csv`), csv, 'utf8'); 
+    fsPath.writeFileSync(outputPath(`agents.csv`), csv, 'utf8'); 
 
     log(chalk.bold.magenta('Done!'));    
   } else {
     log(chalk.bold.magenta('agents.csv FOUND! Preparing...'));      
 
-    let data = fs.readFileSync(outputPath('agents.csv'), { encoding: 'utf8' });
+    let data = fsPath.readFileSync(outputPath('agents.csv'), { encoding: 'utf8' });
     data = csvjson.toSchemaObject(data, { quote: true });
 
     let dataCountBefore = data.length;
@@ -275,8 +277,8 @@ app.listen(5051, async () => {
 
     let dataCountAfter = data.length;
 
-    fs.writeFileSync(checkpointsPath(`agents-${dateNow}.csv`), csv, 'utf8');     
-    fs.writeFileSync(outputPath(`agents.csv`), csv, 'utf8');
+    fsPath.writeFileSync(checkpointsPath(`agents-${dateNow}.csv`), csv, 'utf8');     
+    fsPath.writeFileSync(outputPath(`agents.csv`), csv, 'utf8');
 
     log(chalk.bold.magenta('Done!'));
     log('');
