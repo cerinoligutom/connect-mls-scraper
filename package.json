@@ -2,11 +2,11 @@
   "name": "connect-mls-scraper",
   "version": "1.0.0",
   "description": "Scraper for agents @ ConnectMLS",
-  "main": "index.js",
+  "main": "scraper.js",
   "scripts": {
     "start": "node scraper.js",
-    "dev": "pm2 start index.js --watch",
-    "stop": "pm2 stop index.js"
+    "dev": "pm2 start scraper.js --watch",
+    "stop": "pm2 stop scraper.js"
   },
   "repository": {
     "type": "git",
