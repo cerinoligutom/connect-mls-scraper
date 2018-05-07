@@ -160,7 +160,6 @@ app.listen(+process.env.PORT || 5050, async () => {
 
   log(chalk.bold.magenta('Magic start!'));  
   while (currentListingCount <= totalListings) {
-    if (currentListingCount === 10) break;
     log(chalk.bold.bgGreen.white(`Processing listing ${currentListingCount} out of ${totalListings}`));
     let agentDetails = {
       Name: '',
