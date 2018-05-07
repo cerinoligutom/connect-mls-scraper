@@ -37,7 +37,7 @@ const PARAMS = {
   monthsBack: process.env.MONTHS_BACK
 };
 
-app.listen(5051, async () => {
+app.listen(+process.env.PORT || 5050, async () => {
   log(chalk.bold.magenta('Checking .env parameters...'));
 
   log(chalk.bold.magenta('Checking Credentials parameters...'));  
@@ -160,7 +160,7 @@ app.listen(5051, async () => {
 
   log(chalk.bold.magenta('Magic start!'));  
   while (currentListingCount <= totalListings) {
-    if (currentListingCount === 5) break;
+    if (currentListingCount === 10) break;
     log(chalk.bold.bgGreen.white(`Processing listing ${currentListingCount} out of ${totalListings}`));
     let agentDetails = {
       Name: '',
@@ -210,30 +210,34 @@ app.listen(5051, async () => {
 
     let detailsLastItem = details[details.length - 1].trim();
     if (detailsLastItem.includes('@')) {
-      agentDetails.Email = detailsLastItem; // Set email
+      agentDetails.Email = detailsLastItem.split(';')[0].trim(); // Set email
       details.pop();
     }
 
     details.forEach(detail => {
-      detail = detail.trim().toLowerCase();
+      // UTF-8: https://stackoverflow.com/a/26301969
+      let lowercasedDetail = JSON.parse(JSON.stringify(detail.trim().toLowerCase()));
 
-      if (detail.startsWith('office')) {
-        detail = detail.replace('office', '').trim();
-        agentDetails.Office = detail;
-      } else if (detail.startsWith('direct line')) {
-        detail = detail.replace('direct line', '').trim();
-        agentDetails.DirectLine = detail;
-      } else if (detail.startsWith('cell')) {
-        detail = detail.replace('cell', '').trim();
-        agentDetails.Cell = detail;
-      } else if (detail.startsWith('fax')) {
-        detail = detail.replace('fax', '').trim();
-        agentDetails.Fax = detail;
-      } else if (detail.startsWith('personal fax')) {
-        detail = detail.replace('personal fax', '').trim();
-        agentDetails.PersonalFax = detail;
-      } else if (detail.includes('@')) {
-        agentDetails.Email = detail;
+      console.log('detail:', lowercasedDetail);
+
+      if (lowercasedDetail.startsWith('office')) {
+        lowercasedDetail = lowercasedDetail.replace('office', '').trim();
+        agentDetails.Office = lowercasedDetail;
+      } else if (lowercasedDetail.startsWith('direct line')) {
+        lowercasedDetail = lowercasedDetail.replace('direct line', '').trim();
+        agentDetails.DirectLine = lowercasedDetail;
+      } else if (lowercasedDetail.startsWith('cell')) {
+        lowercasedDetail = lowercasedDetail.replace('cell', '').trim();
+        agentDetails.Cell = lowercasedDetail;
+      } else if (lowercasedDetail.startsWith('fax')) {
+        lowercasedDetail = lowercasedDetail.replace('fax', '').trim();
+        agentDetails.Fax = lowercasedDetail;
+      } else if (lowercasedDetail.startsWith('personal')) {
+        lowercasedDetail = lowercasedDetail.replace('personal', '').replace('fax', '').trim();
+        agentDetails.PersonalFax = lowercasedDetail;
+      } else if (lowercasedDetail.includes('@')) {
+        let email = detail.split(';')[0].trim();
+        agentDetails.Email = lowercasedDetail.split(';')[0].trim();
       }
     });
 
