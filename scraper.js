@@ -222,8 +222,8 @@ app.listen(+process.env.PORT || 5050, async () => {
       if (lowercasedDetail.startsWith('office')) {
         lowercasedDetail = lowercasedDetail.replace('office', '').trim();
         agentDetails.Office = lowercasedDetail;
-      } else if (lowercasedDetail.startsWith('direct line')) {
-        lowercasedDetail = lowercasedDetail.replace('direct line', '').trim();
+      } else if (lowercasedDetail.startsWith('direct')) {
+        lowercasedDetail = lowercasedDetail.replace('direct', '').replace('line', '').trim();
         agentDetails.DirectLine = lowercasedDetail;
       } else if (lowercasedDetail.startsWith('cell')) {
         lowercasedDetail = lowercasedDetail.replace('cell', '').trim();
@@ -300,7 +300,7 @@ app.listen(+process.env.PORT || 5050, async () => {
     log(chalk.bold.magenta('Updating data...'));
     
     allAgentDetails.forEach(agent => {
-      let dataAgentIndex = _.findIndex(data, dataAgent => dataAgent.Name === agent.Name);
+      let dataAgentIndex = _.findIndex(data, dataAgent => dataAgent.Name.trim() === agent.Name.trim());
 
       // If agent exists, update fields
       if (dataAgentIndex > -1) {
@@ -319,8 +319,13 @@ app.listen(+process.env.PORT || 5050, async () => {
 
     let dataCountAfter = data.length;
 
-    fsPath.writeFileSync(checkpointsPath(`agents-${dateNow}.csv`), csv, 'utf8');     
-    fsPath.writeFileSync(outputPath(`agents.csv`), csv, 'utf8');
+    let updatedData = csvjson.toCSV(data, {
+      headers: 'key',
+      wrap: true
+    });
+
+    fsPath.writeFileSync(checkpointsPath(`agents-${dateNow}.csv`), updatedData, 'utf8');     
+    fsPath.writeFileSync(outputPath(`agents.csv`), updatedData, 'utf8');
 
     log(chalk.bold.magenta('Done!'));
     log('');
