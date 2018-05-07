@@ -217,8 +217,6 @@ app.listen(+process.env.PORT || 5050, async () => {
       // UTF-8: https://stackoverflow.com/a/26301969
       let lowercasedDetail = JSON.parse(JSON.stringify(detail.trim().toLowerCase()));
 
-      console.log('detail:', lowercasedDetail);
-
       if (lowercasedDetail.startsWith('office')) {
         lowercasedDetail = lowercasedDetail.replace('office', '').trim();
         agentDetails.Office = lowercasedDetail;
