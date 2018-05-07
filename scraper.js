@@ -159,13 +159,12 @@ app.listen(+process.env.PORT || 5050, async () => {
   let allAgentDetails = [];
 
   log(chalk.bold.magenta('Magic start!'));
-  while (currentListingCount <= totalListings) {
-    log(chalk.bold.bgGreen.white(`Processing listing ${currentListingCount} out of ${totalListings}`));
-    
+  while (currentListingCount <= totalListings) {    
     if (process.env.SEARCH_RESULTS_LIMIT) {
       log(chalk.bold.bgRed.white(`SEARCH_RESULTS_LIMIT Parameter is set! Stopping @ ${process.env.SEARCH_RESULTS_LIMIT}`));
       if (currentListingCount > +process.env.SEARCH_RESULTS_LIMIT) break;
     }
+    log(chalk.bold.bgGreen.white(`Processing listing ${currentListingCount} out of ${totalListings}`));    
     
     let agentDetails = {
       Name: '',
