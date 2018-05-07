@@ -258,6 +258,8 @@ app.listen(+process.env.PORT || 5050, async () => {
 
   let dateNow = new Date().getTime();
 
+  allAgentDetails = _.uniqBy(allAgentDetails, 'Name');
+
   let csv = csvjson.toCSV(allAgentDetails, {
     headers: 'key',
     wrap: true
@@ -301,7 +303,9 @@ app.listen(+process.env.PORT || 5050, async () => {
     let agentsUpdatedCount = 0;
 
     log(chalk.bold.magenta('Updating data...'));
-    
+
+    allAgentDetails = _.uniqBy(allAgentDetails, 'Name');
+
     allAgentDetails.forEach(agent => {
       let dataAgentIndex = _.findIndex(data, dataAgent => dataAgent.Name.trim() === agent.Name.trim());
 
