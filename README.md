@@ -17,7 +17,9 @@ An agent scraper for Connect MLS
 
 # Prerequisites
 * NodeJS (get @ https://nodejs.org/)
-* `.env` file for credentials, parameters and configs 
+* Connect MLS account
+* `.env` file for credentials, parameters and configs
+  * Make sure to fill up the `USERID` and `PASSWORD` section
 
 # Install dependencies
 
