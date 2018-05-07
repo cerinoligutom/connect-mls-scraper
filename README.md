@@ -80,6 +80,9 @@ AGENT_PAGE_DELAY=2000
 
 # Set to "false" if you want to see the browser in action, "true" if not
 SILENT=false
+
+# Usually it's 500 max due to limitation of Connect MLS Search results
+SEARCH_RESULTS_LIMIT=
 ```
 
 # Troubleshooting
