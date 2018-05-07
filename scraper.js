@@ -326,6 +326,8 @@ app.listen(+process.env.PORT || 5050, async () => {
 
     let dataCountAfter = data.length;
 
+    data = _.uniqBy(data, 'Name');
+
     let updatedData = csvjson.toCSV(data, {
       headers: 'key',
       wrap: true
