@@ -88,7 +88,6 @@ SEARCH_RESULTS_LIMIT=
 # Troubleshooting
 * An error occurred midway. Terminate the process with `ctrl+C` or closing the terminal/cmd.
 * If it takes too long on your end to load pages (usually due to internet connection), try increasing the `*_DELAY` values in the config as per page concerned.
-* You get an error that address is in use (EADDRINUSE :: port). This is due to the Node process still being alive. Either you change the PORT in the `.env` file or give it some time and run `npm start` again. If you insist on using the same port, terminate the node process manually.
 
 # Bugs/Issues
 * Please open a ticket on the [issues section](https://github.com/zeferinix/connect-mls-scraper/issues) and I will look into it when I find time.
