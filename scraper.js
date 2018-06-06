@@ -1,4 +1,3 @@
-const express = require('express');
 const puppeteer = require('puppeteer');
 const _ = require('lodash');
 const csvjson = require('csvjson');
@@ -7,10 +6,9 @@ const fsPath = require('fs-path');
 const path = require('path');
 const chalk = require('chalk');
 const log = console.log;
+let nodeCleanup = require('node-cleanup');
 
 require('dotenv').config();
-
-const app = express();
 
 function waitForFrame(page, frameName) {
   let fulfill;
@@ -450,3 +448,18 @@ scrape().catch(err => {
   process.exit(0);
 });
 
+nodeCleanup((exitCode, signal) => {
+  if (exitCode !== 0) {
+    log(chalk.bold.bgRed.white('--- SOMETHING WENT WRONG ---'));
+    log(chalk.bold.bgRed.white('ATTEMPTING TO SAVE INITIALLY SCRAPED DATA'));
+    log('');
+    log(chalk.bold.bgRed.white('Report this error to the developer:'));
+    log(chalk.bold.bgRed.white('exitCode:', exitCode));
+    log(chalk.bold.bgRed.white('signal:', signal));    
+    log(chalk.bold.bgRed.white('--------------------------------------------'));  
+    
+    writeToFile();
+
+    process.exit(0);
+  }
+});
